@@ -1,0 +1,101 @@
+﻿@page
+@model IndexModel
+@{
+    ViewData["Title"] = "Home page";
+}
+
+
+<div class="text-center">
+    <h1 class="display-4">Orchid Language Transpiler</h1>
+</div>
+
+<form method="post">
+    <div class="d-flex flex-column">
+        <div class="p-2 flex-fill">
+            <span class="h3">
+                Orchid Script
+            </span>
+            <textarea id="orchid"
+                      data-val="true"
+                      data-val-required="This field is required"
+                      asp-for="TranspilationModel.OrchidScript"></textarea>
+        </div>
+        <div class="actions d-flex flex-row-reverse p-2">
+            <button class="btn btn-primary" id="transpile" type="submit">
+                Transpile
+            </button>
+        </div>
+
+        <ul class="nav nav-tabs">
+            <li class="nav-item active" data-bs-toggle="tab" data-bs-target="#generated" type="button" role="tab" aria-controls="generated" aria-selected="true">
+                <a class="nav-link active" href="#generated">Generated</a>
+            </li>
+            <li class="nav-item" data-bs-toggle="tab" data-bs-target="#output" type="button" role="tab" aria-controls="output" aria-selected="true">
+                <a class="nav-link" href="#output">Output</a>
+            </li>
+        </ul>
+        <div class="tab-content">
+            <div class="tab-pane fade show active" id="generated">
+                <div class="p-2 flex-fill">
+                    <textarea id="csharp">
+                        @if (Model.TranspilationModel.CSharpScript != null)
+                        {
+                            @foreach (var line in Model.TranspilationModel.CSharpScript.Split("\n"))
+                            {
+                                @Html.Raw(line)
+                            }
+                        }                
+                    </textarea>
+                </div>
+            </div>
+
+            <div class="tab-pane fade" id="output">
+                <div class="p-2 flex-fill">
+                    <div>
+                        @foreach (string line in (@Model?.TranspilationModel?.Output ?? string.Empty).Split("\n"))
+                        {
+                            @line
+                            <br />
+                        }
+                    </div>
+                </div>
+            </div>
+            
+        </div>
+
+
+    </div>
+
+
+</form>
+
+@section Scripts {
+
+<script src="js/codemirror.js" lang="javascript"></script>
+<script src="js/mode/clike/clike.js" lang="javascript"></script>
+<script src="js/mode/lua/lua.js" lang="javascript"></script>
+<link href="css/codemirror.css" rel="stylesheet" />
+<script>
+    const orchidTextArea = document.getElementById("orchid");
+    const editor1 = CodeMirror.fromTextArea(orchidTextArea, {
+        mode: 'lua',
+        lineNumbers: true
+    });
+
+    const csharpTextArea = document.getElementById("csharp");
+    const editor2 = CodeMirror.fromTextArea(csharpTextArea, {
+        mode: 'clike',
+        lineNumbers: true
+    });
+
+    var triggerTabList = [].slice.call(document.querySelectorAll('.nav a'))
+    triggerTabList.forEach(function (triggerEl) {
+      var tabTrigger = new bootstrap.Tab(triggerEl)
+
+      triggerEl.addEventListener('click', function (event) {
+        event.preventDefault()
+        tabTrigger.show()
+      })
+    });
+</script>
+}

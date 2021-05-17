@@ -1,0 +1,44 @@
+﻿/*
+ * Simple local function
+ */
+func pr(what) do
+    print(what)
+end
+
+# assignment expressions
+array := [1, 2, 3, 4]
+res := map(12, 12)
+s := 'this is a single quoted string'
+s2 := "a double ${s} quote done"
+
+if res = true then
+    res := false
+elseif res != true then
+    pr("what the?")
+elseif res != 12 then
+    pr("huh")
+else
+    pr("else block")
+end
+
+if (1 = 1 && 2 = 2) then 
+    pr("yes") 
+else 
+    pr("no") 
+end
+
+for x := 1; x < 10; x := x + 1 
+do
+    pr(x)
+end
+
+while true
+do
+    pr('not true')
+end
+
+fn := (x) => do 
+    return x * x
+end
+
+return res ** 2 + s2 + s1

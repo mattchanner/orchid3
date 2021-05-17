@@ -1,0 +1,26 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<OutputType>library</OutputType>
+		<TargetFramework>net5.0</TargetFramework>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<None Remove="Parser\antlr-4.9.2-comp
+			  e.jar" />
+		<None Remove="Parser\antlr-runtime-4.9.2.jar" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Antlr4.Runtime.Standard" Version="4.9.2" />
+		<PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="3.9.0" />
+		<PackageReference Include="Microsoft.CodeAnalysis.CSharp.Scripting" Version="3.9.0" />
+		<PackageReference Include="System.CodeDom" Version="5.0.0" />
+	</ItemGroup>
+
+	<Target Name="PreBuild" BeforeTargets="PreBuildEvent">
+		<Message Importance="high" Text="Compiling new Antl4 Parser" />
+		<Exec Command="java -jar antlr-4.9.2-complete.jar -Dlanguage=CSharp OrchidLexer.g4 -listener -visitor -package Orchid.Parser" WorkingDirectory="Parser" />
+		<Exec Command="java -jar antlr-4.9.2-complete.jar -Dlanguage=CSharp OrchidParser.g4 -listener -visitor -package Orchid.Parser" WorkingDirectory="Parser" />
+	</Target>
+</Project>
